@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 import { getWords, setFiglet, setHangman } from './shared';
-import { ALPHABET, HANGMAN_LIMBS, WIN, LOSE } from './constants';
+import { LOGGER, ALPHABET, HANGMAN_LIMBS, WIN, LOSE } from './constants';
 import { TITLE, DANGER, WARNING, ERROR } from './chalk';
 
 let word: string;
@@ -18,63 +18,50 @@ function setInquirer(): void {
 				type: 'input',
 			},
 		])
-		.then(({ letter }) => {
-			if (letter.length > 1) {
-				console.log(
-					ERROR(
-						"\n Either you didn't enter a letter or entered more than one... \n",
-					),
-				);
-				setInquirer();
-			}
-
-			if (ALPHABET.indexOf(letter) !== -1) {
-				if (word.split('').includes(letter)) {
-					if (!correctLetters.includes(letter)) {
-						correctLetters.push(letter);
-					}
-				} else {
-					if (!wrongLetters.includes(letter)) {
-						wrongLetters.push(letter);
-					}
-				}
-
-				checkWinningWord();
-			}
-		});
+		.then(({ letter }) => getAnswer(letter));
 }
 
-function setConsoleMessage(state: string = ''): void {
-	'use strict';
-	process.stdout.write('\u001b[3J\u001b[2J\u001b[1J');
+function getAnswer(letter: string): void {
+	if (!letter) {
+		LOGGER(ERROR('\n You need to enter a letter... \n'));
+	} else if (letter.length > 1) {
+		LOGGER(ERROR('\n You can enter just one letter... \n'));
+	} else if (
+		correctLetters.includes(letter) ||
+		wrongLetters.includes(letter)
+	) {
+		LOGGER(ERROR("\n You've already used that letter... \n"));
+	} else {
+		if (ALPHABET.indexOf(letter) !== -1) {
+			if (word.split('').includes(letter)) {
+				correctLetters.push(letter);
+			} else {
+				wrongLetters.push(letter);
+			}
 
-	console.clear();
-
-	switch (state) {
-		case WIN:
-			console.log(TITLE('YOU WON! \n'));
-			break;
-		case LOSE:
-			console.log(
-				`${DANGER('GAME OVER \n')}`,
-				`\nThe word was ${WARNING(word.toUpperCase())}\n`,
-			);
-			break;
-		default:
-			console.log(
-				`${TITLE(`Guess the word...${DANGER(' OR HANG!')}`)} \n`,
-			);
-			setHangman(wrongLetters.length);
-			console.log(`\n ${wordToGuess.toUpperCase()} \n`);
-			break;
+			setLetters();
+			checkWinningWord();
+		} else {
+			LOGGER(ERROR('\n You can only use letters... \n'));
+		}
 	}
+
+	if (!gameOver) setInquirer();
 }
 
-function setInitialGuess(): void {
-	word.split('').forEach(() => (wordToGuess += '_ '));
+function checkWinningWord(): void {
+	if (wordToGuess.replace(/\s/g, '').toLowerCase() === word) {
+		gameOver = true;
+		setConsoleMessage(WIN);
+	} else if (wrongLetters.length === HANGMAN_LIMBS) {
+		gameOver = true;
+		setConsoleMessage(LOSE);
+	}
+
+	if (gameOver) askPlayAgain();
 }
 
-function setGuessedLetters(): void {
+function setLetters(): void {
 	wordToGuess = '';
 
 	word.split('').forEach((letter: string) => {
@@ -88,21 +75,27 @@ function setGuessedLetters(): void {
 	setConsoleMessage();
 }
 
-function checkWinningWord(): void {
-	setGuessedLetters();
+function setConsoleMessage(state: string = ''): void {
+	'use strict';
+	process.stdout.write('\u001b[3J\u001b[2J\u001b[1J');
 
-	if (wordToGuess.replace(/\s/g, '').toLowerCase() === word) {
-		gameOver = true;
-		setConsoleMessage(WIN);
-	} else if (wrongLetters.length === HANGMAN_LIMBS) {
-		gameOver = true;
-		setConsoleMessage(LOSE);
-	}
+	console.clear();
 
-	if (gameOver) {
-		askPlayAgain();
-	} else {
-		setInquirer();
+	switch (state) {
+		case WIN:
+			LOGGER(TITLE('YOU WON! \n'));
+			break;
+		case LOSE:
+			LOGGER(
+				`${DANGER('GAME OVER \n')}`,
+				`\nThe word was ${WARNING(word.toUpperCase())}\n`,
+			);
+			break;
+		default:
+			LOGGER(`${TITLE(`Guess the word...${DANGER(' OR HANG!')}`)} \n`);
+			setHangman(wrongLetters.length);
+			LOGGER(`\n ${wordToGuess.toUpperCase()} \n`);
+			break;
 	}
 }
 
@@ -131,7 +124,7 @@ async function startGame(): Promise<void> {
 	wrongLetters = [];
 	gameOver = false;
 
-	setInitialGuess();
+	word.split('').forEach(() => (wordToGuess += '_ '));
 	setConsoleMessage();
 	setInquirer();
 }

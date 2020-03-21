@@ -1,3 +1,4 @@
+export const LOGGER: Function = console.log;
 export const ALPHABET: string = 'abcdefghijklmnñopqrstuvwxyz';
 export const HANGMAN_LIMBS: number = 6; // Head, body, arms & legs
 export const WIN: string = 'WIN';
