@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import figlet from 'figlet';
 import { WOOD, ROPE, METAL, SKIN, PANTS } from './chalk';
 
 function getRandomNumber(max: number): number {
@@ -10,6 +11,26 @@ async function getWords(): Promise<string> {
 		.then(response => response.json())
 		.then(({ data }) => data[getRandomNumber(data.length)])
 		.catch((error: Error) => console.log(error));
+}
+
+function setFiglet(text: string): void {
+	figlet.text(
+		text,
+		{
+			font: 'Electronic',
+			horizontalLayout: 'default',
+			verticalLayout: 'default',
+		},
+		(err, data) => {
+			if (err) {
+				console.log('Something went wrong...');
+				// console.dir(err);
+				return;
+			}
+
+			console.log(data);
+		},
+	);
 }
 
 function setHangman(limb: number): void {
@@ -92,4 +113,4 @@ function setHangman(limb: number): void {
 	}
 }
 
-export { getWords, setHangman };
+export { getWords, setFiglet, setHangman };

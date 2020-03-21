@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import { getWords, setHangman } from './shared';
+import { getWords, setFiglet, setHangman } from './shared';
 import { ALPHABET, HANGMAN_LIMBS, WIN, LOSE } from './constants';
 import { TITLE, DANGER, WARNING, ERROR } from './chalk';
 
@@ -52,11 +52,11 @@ function setConsoleMessage(state: string = ''): void {
 
 	switch (state) {
 		case WIN:
-			console.log(TITLE('You won!!! \n'));
+			console.log(TITLE('YOU WON! \n'));
 			break;
 		case LOSE:
 			console.log(
-				`${DANGER('Game over... \n')}`,
+				`${DANGER('GAME OVER \n')}`,
 				`\nThe word was ${WARNING(word.toUpperCase())}\n`,
 			);
 			break;
@@ -136,4 +136,5 @@ async function startGame(): Promise<void> {
 	setInquirer();
 }
 
-startGame();
+setFiglet('Hangman');
+setTimeout(startGame, 1000);
