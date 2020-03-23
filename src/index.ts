@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import inquirer from 'inquirer';
 import { getWords, setFiglet, setHangman } from './shared';
 import { LOGGER, ALPHABET, HANGMAN_LIMBS, WIN, LOSE } from './constants';
