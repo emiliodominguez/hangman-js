@@ -10,7 +10,7 @@
 	"author": "Emilio Domínguez",
 	"description": "A console version of the classic hangman game...",
 	"license": "ISC",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"main": "build/index.js",
 	"scripts": {
 		"tsc": "tsc -w",
