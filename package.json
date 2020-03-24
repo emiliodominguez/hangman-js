@@ -1,5 +1,6 @@
 {
 	"name": "hangman-js",
+	"version": "1.0.4",
 	"keywords": [
 		"hangman",
 		"words",
@@ -9,8 +10,11 @@
 	],
 	"author": "Emilio Domínguez",
 	"description": "A console version of the classic hangman game...",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/emiliodominguez/hangman-js.git"
+	},
 	"license": "ISC",
-	"version": "1.0.1",
 	"main": "build/index.js",
 	"scripts": {
 		"tsc": "tsc -w",

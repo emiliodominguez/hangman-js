@@ -4,3 +4,4 @@ build
 
 # Config files
 package-lock.json
+.npmignore
