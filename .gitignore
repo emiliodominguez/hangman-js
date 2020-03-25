@@ -1,6 +1,6 @@
 # Folders
 node_modules
-build
+dist
 
 # Config files
 package-lock.json

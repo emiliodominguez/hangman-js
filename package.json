@@ -1,6 +1,8 @@
 {
 	"name": "hangman-js",
-	"version": "1.0.4",
+	"author": "Emilio Domínguez",
+	"description": "A console version of the classic hangman game...",
+	"version": "1.0.5",
 	"keywords": [
 		"hangman",
 		"words",
@@ -8,24 +10,22 @@
 		"node",
 		"javascript"
 	],
-	"author": "Emilio Domínguez",
-	"description": "A console version of the classic hangman game...",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/emiliodominguez/hangman-js.git"
 	},
-	"license": "ISC",
-	"main": "build/index.js",
+	"license": "MIT",
+	"main": "dist/index.js",
 	"scripts": {
 		"tsc": "tsc -w",
-		"nodemon": "nodemon build/index.js",
+		"nodemon": "nodemon dist/index.js",
 		"dev": "npm-run-all --parallel tsc nodemon",
 		"prestart": "npm install",
-		"start": "tsc && node build/index.js",
+		"start": "tsc && node dist/index.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"bin": {
-		"hangman": "./build/index.js"
+		"hangman": "./dist/index.js"
 	},
 	"dependencies": {
 		"chalk": "^3.0.0",
